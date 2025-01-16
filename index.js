@@ -26,6 +26,27 @@ const User = new mongoose.model("User", userSchema)
 
 //Routes
 
+app.post("/login",async (req, res)=> {
+    const { email, password} = req.body
+    try{
+        const user = await User.findOne({ email });
+        if(user){
+            if(password === user.password ) {
+                res.send({message: "Login Successfull", user: user})
+            } else {
+                res.send({ message: "Password didn't match"})
+            }
+        } else {
+            res.send({message: "User not registered"})
+        }
+    
+}catch (err) {
+    res.status(500).send(err);
+    console.log(err)
+}
+}) ;
+
+
 
 app.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
